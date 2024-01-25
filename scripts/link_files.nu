@@ -7,9 +7,9 @@ def create_any_link [ start: string, destination: string, fresh_install: int ]: 
 	$destination | save -fa /tmp/install_script.log
 
 	if $fresh_install == 1 {
-		ln -sfr $start $destination
+		ln -sf $start $destination
 	} else {
-		doas ln -srf $start $destination
+		doas ln -sf $start $destination
 	}
 }
 

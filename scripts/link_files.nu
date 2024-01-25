@@ -1,10 +1,16 @@
 #! /usr/bin/env nu
 
 def create_any_link [ start: string, destination: string, fresh_install: int ]: any -> any {
-	print "######\nstart\n"
+	print "\n######\nlink\nstart\n"
 	print $start
-	print "######\ndestination\n"
+	print "\n######\ndestination\n"
 	print $destination
+
+	"\n######\nlink\nstart\n" | save -f /tmp/install_script.log
+	$start | save -f /tmp/install_script.log
+	"\n######\ndestination\n" | save -f /tmp/install_script.log
+	$destination | save -f /tmp/install_script.log
+
 	if $fresh_install == 1 {
 		ln -sfr $start $destination
 	} else {
@@ -47,10 +53,16 @@ def create_all_links [ type: string, fresh_install: string path_to_git_repo: str
 #######################################
 
 def copy_any_file [ start: string, destination: string, fresh_install: int ]: any -> any {	
-	print "######\nstart\n"
+	print "\n######\ncopy\nstart\n"
 	print $start
-	print "######\ndestination\n"
+	print "\n######\ndestination\n"
 	print $destination
+
+	"\n######\ncopy\nstart\n" | save -f /tmp/install_script.log
+	$start | save -f /tmp/install_script.log
+	"\n######\ndestination\n" | save -f /tmp/install_script.log
+	$destination | save -f /tmp/install_script.log
+
 	if $fresh_install == 1 {
 		cp -rf $start $destination
 	} else {
@@ -75,8 +87,11 @@ def copy_home_manager_file [ module: string, git_repo_file: string config_file: 
 #######################################
 
 def read_from [ file: string, fresh_install: int ]: any -> string {
-	print "######\nopen\n"
+	print "\n######\nopen\n"
 	print $file
+
+	"\n######\nopen\n" | save -f /tmp/install_script.log
+	$file | save -f /tmp/install_script.log
 	if $fresh_install == 1 {
 		return ( open --raw $file )
 	} else {
@@ -87,6 +102,11 @@ def read_from [ file: string, fresh_install: int ]: any -> string {
 #######################################
 
 def save_to_file [ file: string, fresh_install: int ]: any -> any {
+	print "\n######\nopen\n"
+	print $file
+
+	"\n######\nopen\n" | save -f /tmp/install_script.log
+	$file | save -f /tmp/install_script.log
 	if $fresh_install == 1 {
 		$in | save -f $file
 	} else {

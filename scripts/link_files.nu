@@ -1,7 +1,7 @@
 #! /usr/bin/env nu
 
 def create_any_link [ start: string, destination: string, fresh_install: int ]: any -> any {
-	"\n######\nlink\nstart\n" | save -fa /tmp/install_script.log
+	"\n\n######\nlink\nstart\n" | save -fa /tmp/install_script.log
 	$start | save -fa /tmp/install_script.log
 	"\n######\ndestination\n" | save -fa /tmp/install_script.log
 	$destination | save -fa /tmp/install_script.log
@@ -48,7 +48,7 @@ def create_all_links [ type: string, fresh_install: string path_to_git_repo: str
 #######################################
 
 def copy_any_file [ start: string, destination: string, fresh_install: int ]: any -> any {	
-	"\n######\ncopy\nstart\n" | save -fa /tmp/install_script.log
+	"\n\n######\ncopy\nstart\n" | save -fa /tmp/install_script.log
 	$start | save -fa /tmp/install_script.log
 	"\n######\ndestination\n" | save -fa /tmp/install_script.log
 	$destination | save -fa /tmp/install_script.log
@@ -77,7 +77,7 @@ def copy_home_manager_file [ module: string, git_repo_file: string config_file: 
 #######################################
 
 def read_from [ file: string, fresh_install: int ]: any -> string {
-	"\n######\nopen\n" | save -fa /tmp/install_script.log
+	"\n\n######\nopen\n" | save -fa /tmp/install_script.log
 	$file | save -fa /tmp/install_script.log
 	if $fresh_install == 1 {
 		return ( open --raw $file )
@@ -207,7 +207,7 @@ def main [ fresh_install: int = 0 ] any -> any {
 
 	#######################################
 
-	create_any_link $path_to_git_repo $path_to_config $fresh_install
+	create_any_link ( [ $path_to_git_repo, "/*" ] | str join ) $path_to_config $fresh_install
 	
 	#######################################
 	

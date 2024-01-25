@@ -193,7 +193,7 @@ def main [ fresh_install: int = 0 ] any -> any {
 
 	#######################################
 
-	creare_any_link $path_to_git_repo $path_to_config $fresh_install
+	create_any_link $path_to_git_repo $path_to_config $fresh_install
 	
 	#######################################
 	
@@ -246,7 +246,7 @@ def main [ fresh_install: int = 0 ] any -> any {
 
 	#######################################
 
-	creare_any_link ( [ $path_to_git_repo, "flake.nix" ] | path join ) ( [ $path_to_config, "edit_this_flake.nix" ] | path join ) $fresh_install
+	create_any_link ( [ $path_to_git_repo, "flake.nix" ] | path join ) ( [ $path_to_config, "edit_this_flake.nix" ] | path join ) $fresh_install
 	
 	copy_any_file ( [ $path_to_git_repo, "flake.nix" ] | path join ) ( [ $path_to_config, "flake.nix" ] | path join ) $fresh_install
 	

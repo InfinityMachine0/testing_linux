@@ -14,7 +14,7 @@ in
       # networkmanager -> enable networkmanager tool
 
     # setting the initial password
-    initialPassword = "password"; 
+    initialPassword = "temp"; 
 
     shell = pkgs.nushell;
   };

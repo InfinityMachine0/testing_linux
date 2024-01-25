@@ -1,6 +1,10 @@
 #! /usr/bin/env nu
 
 def create_any_link [ start: string, destination: string, fresh_install: int ]: any -> any {
+	print "######\nstart\n"
+	print $start
+	print "######\ndestination\n"
+	print $destination
 	if $fresh_install == 1 {
 		ln -sfr $start $destination
 	} else {
@@ -43,6 +47,10 @@ def create_all_links [ type: string, fresh_install: string path_to_git_repo: str
 #######################################
 
 def copy_any_file [ start: string, destination: string, fresh_install: int ]: any -> any {	
+	print "######\nstart\n"
+	print $start
+	print "######\ndestination\n"
+	print $destination
 	if $fresh_install == 1 {
 		cp -rf $start $destination
 	} else {
@@ -67,6 +75,8 @@ def copy_home_manager_file [ module: string, git_repo_file: string config_file: 
 #######################################
 
 def read_from [ file: string, fresh_install: int ]: any -> string {
+	print "######\nopen\n"
+	print $file
 	if $fresh_install == 1 {
 		return ( open --raw $file )
 	} else {

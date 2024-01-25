@@ -2,7 +2,7 @@
 
 let path_to_config = "/mnt/etc/nixos/config_dir"
 
-let git_repo_name = "sturdy-lamp"
+let git_repo_name = "testing_linux"
 
 let path_to_git_repo = ( [ "/mnt/etc/nixos", $git_repo_name ] | path join )
 
@@ -49,13 +49,13 @@ def choose_thing [ thing: string ]: any -> string {
 
 def format_platform [ platform: int ]: any -> any {
 	if $platform == 1 {
-		nix --extra-experimental-features nix-command --extra-experimental-features flakes run github:nix-community/disko -- --mode disko ( [ /home/nixos, $git_repo_name, system/modules/btrfs/laptop_btrfs_config.nix ] | path join )
+		nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko ( [ /home/nixos, $git_repo_name, system/modules/btrfs/laptop_btrfs_config.nix ] | path join )
 		return
 	} else if $platform == 2 {
-		nix --extra-experimental-features nix-command --extra-experimental-features flakes run github:nix-community/disko -- --mode disko ( [ /home/nixos, $git_repo_name, system/modules/btrfs/desktop_btrfs_config.nix ] | path join )
+		nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko ( [ /home/nixos, $git_repo_name, system/modules/btrfs/desktop_btrfs_config.nix ] | path join )
 		return
 	} else if $platform == 3 {
-		nix --extra-experimental-features nix-command --extra-experimental-features flakes run github:nix-community/disko -- --mode disko ( [ /home/nixos, $git_repo_name, system/modules/btrfs/virtualbox_btrfs_config.nix ] | path join )
+		nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko ( [ /home/nixos, $git_repo_name, system/modules/btrfs/virtualbox_btrfs_config.nix ] | path join )
 		return
 	} else {
 		print "incorrect input data\n"
@@ -137,19 +137,8 @@ def main []: any -> any {
 	#######################################
 	
 	mkdir $path_to_config
-	mkdir ( [ $path_to_config, "system" ] | path join )
-	
-	mkdir ( [ $path_to_config, "system/modules" ] | path join )
-
-	mkdir ( [ $path_to_config, "home-manager" ] | path join )
-
-	mkdir ( [ $path_to_config, "home-manager/modules" ] | path join )
 
 	mkdir ( [ $path_to_config, "values" ] | path join )
-
-	mkdir ( [ $path_to_config, "scripts" ] | path join )
-
-	mkdir ( [ "/mnt/home", $username, "wallpapers" ] | path join )
 
 	mkdir ( [ "/mnt/home", $username, "personal_scripts" ] | path join )
 

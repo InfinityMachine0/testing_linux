@@ -51,7 +51,7 @@
     # You should not change this value, even if you update Home Manager. If you do
     # want to update the value, then make sure to first check the Home Manager
     # release notes.
-    stateVersion = "23.05"; # Please read the comment before changing.
+    stateVersion = "23.11"; # Please read the comment before changing.
  
     packages = with pkgs; [ # user packages
       cmake
@@ -65,7 +65,6 @@
       # git -> version control
       # gitui -> git terminal ui client
       # librewolf -> firefox based browser
-      # tmux -> terminal multiplexer
     ];
  
 

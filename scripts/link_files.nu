@@ -1,12 +1,6 @@
 #! /usr/bin/env nu
 
-def creare_any_link [ start: string, destination: string, fresh_install: int ]: any -> any {
-	print "\n#################"
-	print $start
-	print " "
-	print $destination
-	print "\n#################"
-
+def create_any_link [ start: string, destination: string, fresh_install: int ]: any -> any {
 	if $fresh_install == 1 {
 		ln -sfr $start $destination
 	} else {
@@ -21,7 +15,7 @@ def create_link [ type: string, module: string, git_repo_file: string config_fil
 	let path_to_git_repo_module_file = ( [ $path_to_git_repo, $type, "modules", $module, $git_repo_file ] | path join )
 	let path_to_config_module_file = ( [ $path_to_config, $type, "modules", $module, $config_file ] | path join )
 
-	creare_any_link $path_to_git_repo_module_file $path_to_config_module_file $fresh_install
+	create_any_link $path_to_git_repo_module_file $path_to_config_module_file $fresh_install
 }
 
 def create_system_link [ module: string, git_repo_file: string config_file: string, fresh_install: int, path_to_git_repo: string, path_to_config: string ]: any -> any {
@@ -48,13 +42,7 @@ def create_all_links [ type: string, fresh_install: string path_to_git_repo: str
 
 #######################################
 
-def copy_any_file [ start: string, destination: string, fresh_install: int ]: any -> any {
-	print "\n#################"
-	print $start
-	print " "
-	print $destination
-	print "\n#################"
-	
+def copy_any_file [ start: string, destination: string, fresh_install: int ]: any -> any {	
 	if $fresh_install == 1 {
 		cp -rf $start $destination
 	} else {
@@ -202,26 +190,11 @@ def main [ fresh_install: int = 0 ] any -> any {
 	let git_username = ( read_from ( [ $path_to_config, "values/git_username.conf" ] | path join ) $fresh_install | str trim )
 	
 	let git_email = ( read_from ( [ $path_to_config, "values/git_email.conf" ] | path join ) $fresh_install | str trim )
-	
+
 	#######################################
 
-	mkdir $path_to_config
-	mkdir ( [ $path_to_config, "system" ] | path join )
+	creare_any_link $path_to_git_repo $path_to_config $fresh_install
 	
-	mkdir ( [ $path_to_config, "system/modules" ] | path join )
-
-	mkdir ( [ $path_to_config, "home-manager" ] | path join )
-
-	mkdir ( [ $path_to_config, "home-manager/modules" ] | path join )
-
-	mkdir ( [ $path_to_config, "values" ] | path join )
-
-	mkdir ( [ $path_to_config, "scripts" ] | path join )
-
-	mkdir ( [ "/mnt/home", $username, "wallpapers" ] | path join )
-
-	mkdir ( [ "/mnt/home", $username, "personal_scripts" ] | path join )
-
 	#######################################
 	
 	select_platform $platform $fresh_install $path_to_git_repo $path_to_config
@@ -229,18 +202,7 @@ def main [ fresh_install: int = 0 ] any -> any {
 	select_gpu $gpu $fresh_install $path_to_git_repo $path_to_config
 	
 	#######################################
-	
-	create_basic_home_manager_link "bat" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_home_manager_link "bottom" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_home_manager_link "dunst" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_home_manager_link "foot" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_home_manager_link "fzf" $fresh_install $path_to_git_repo $path_to_config
-	
-	#######################################
-	
-	create_basic_home_manager_link "git" $fresh_install $path_to_git_repo $path_to_config
-	create_home_manager_link "git" "git_names.nix" "git_names.nix" $fresh_install $path_to_git_repo $path_to_config
-	
+
 	copy_home_manager_file "git" "git_names.nix" "no_edit_git_names.nix" $fresh_install $path_to_git_repo $path_to_config
 	
 	replace_home_manager_string "git" "no_edit_git_names.nix" "GIT_USERNAME_REPLACE" $git_username $fresh_install $path_to_config
@@ -248,125 +210,42 @@ def main [ fresh_install: int = 0 ] any -> any {
 	replace_home_manager_string "git" "no_edit_git_names.nix" "GIT_EMAIL_REPLACE" $git_email $fresh_install $path_to_config
 	
 	#######################################
-	
-	create_basic_home_manager_link "gitui" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_home_manager_link "gtk" $fresh_install $path_to_git_repo $path_to_config
-	
-	#######################################
-	
-	create_basic_home_manager_link "home-path" $fresh_install $path_to_git_repo $path_to_config
-	
+
 	copy_home_manager_file "home-path" "home-path_config.nix" "no_edit_home-path_config.nix" $fresh_install $path_to_git_repo $path_to_config
 	
 	replace_home_manager_string "home-path" "no_edit_home-path_config.nix" "USERNAME_REPLACE" $username $fresh_install $path_to_config
-	
-	#######################################
-	
-	create_basic_home_manager_link "hyprland" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_home_manager_link "nixvim" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_home_manager_link "nushell" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_home_manager_link "qt" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_home_manager_link "qutebrowser" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_home_manager_link "rofi" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_home_manager_link "starship" $fresh_install $path_to_git_repo $path_to_config
-	
+
 	#######################################
 	
 	copy_any_file ( [ $path_to_git_repo, "home-manager/modules/wallpapers" ] | path join ) ( [ "/mnt/home", $username ] | path join ) $fresh_install
-	
+
 	#######################################
-	
-	create_basic_home_manager_link "waybar" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_home_manager_link "wezterm" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_home_manager_link "xplr" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_home_manager_link "zellij" $fresh_install $path_to_git_repo $path_to_config
-	
-	#######################################
-	
-	creare_any_link ( [ $path_to_git_repo, "home-manager/home.nix" ] | path join ) ( [ $path_to_config, "home-manager/home.nix" ] | path join ) $fresh_install
-	
-	#######################################
-	
-	creare_any_link ( [ $path_to_git_repo, "scripts/hyprland.sh" ] | path join ) ( [ $path_to_config, "scripts/hyprland.sh" ] | path join ) $fresh_install
-	creare_any_link ( [ $path_to_git_repo, "scripts/update_system.nu" ] | path join ) ( [ $path_to_config, "scripts/update_system.nu" ] | path join ) $fresh_install
-	creare_any_link ( [ $path_to_git_repo, "scripts/link_files.nu" ] | path join ) ( [ $path_to_config, "scripts/link_files.nu" ] | path join ) $fresh_install
-	creare_any_link ( [ $path_to_git_repo, "scripts/refresh_config.nu" ] | path join ) ( [ $path_to_config, "scripts/refresh_config.nu" ] | path join ) $fresh_install
-	creare_any_link ( [ $path_to_git_repo, "scripts/refresh_config.nu" ] | path join ) ( [ $path_to_config, "scripts/refresh_config_true.nu" ] | path join ) $fresh_install
-	
-	creare_any_link ( [ $path_to_git_repo, "scripts/hyprland.sh" ] | path join ) ( [ $path_to_config, $path_to_home, $username, "personal_scripts/hyprland.sh" ] | path join ) $fresh_install
-	creare_any_link ( [ $path_to_git_repo, "scripts/update_system.nu" ] | path join ) ( [ $path_to_config, $path_to_home, $username, "personal_scripts/update_system.nu" ] | path join ) $fresh_install
-	creare_any_link ( [ $path_to_git_repo, "scripts/link_files.nu" ] | path join ) ( [ $path_to_config, $path_to_home, $username, "personal_scripts/link_files.nu" ] | path join ) $fresh_install
-	creare_any_link ( [ $path_to_git_repo, "scripts/refresh_config.nu" ] | path join ) ( [ $path_to_config, $path_to_home, $username, "personal_scripts/refresh_config.nu" ] | path join ) $fresh_install
-	creare_any_link ( [ $path_to_git_repo, "scripts/refresh_config_true.nu" ] | path join ) ( [ $path_to_config, $path_to_home, $username, "personal_scripts/refresh_config_true.nu" ] | path join ) $fresh_install
-	
-	#######################################
-	
-	create_basic_system_link "bluetooth" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_system_link "cups" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_system_link "doas" $fresh_install $path_to_git_repo $path_to_config
-	
-	#######################################
-	
-	create_basic_system_link "firewall" $fresh_install $path_to_git_repo $path_to_config
-	
+
 	copy_system_file "firewall" "firewall_config.nix" "no_edit_firewall_config.nix" $fresh_install $path_to_git_repo $path_to_config
 	
 	replace_system_string "firewall" "no_edit_firewall_config.nix" "TCP_PORTS_REPLACE" $tcp_ports $fresh_install $path_to_config
 	replace_system_string "firewall" "no_edit_firewall_config.nix" "UDP_PORTS_REPLACE" $udp_ports $fresh_install $path_to_config
-	
+
 	#######################################
-	
-	create_basic_system_link "fonts" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_system_link "hyprland" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_system_link "keyboard" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_system_link "locale" $fresh_install $path_to_git_repo $path_to_config
-	
-	#######################################
-	
-	create_basic_system_link "networking" $fresh_install $path_to_git_repo $path_to_config
-	create_system_link "networking" "hostname.nix" "hostname.nix" $fresh_install $path_to_git_repo $path_to_config
-	
+
 	copy_system_file "networking" "hostname.nix" "no_edit_hostname.nix" $fresh_install $path_to_git_repo $path_to_config
 	
 	replace_system_string "networking" "no_edit_hostname.nix" "HOSTNAME_REPLACE" $hostname $fresh_install $path_to_config
-	
+
 	#######################################
-	
-	create_basic_system_link "opengl" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_system_link "pipewire" $fresh_install $path_to_git_repo $path_to_config
-	
-	#######################################
-	
-	create_basic_system_link "ssh" $fresh_install $path_to_git_repo $path_to_config
-	create_system_link "ssh" "ssh_ports.nix" "ssh_ports.nix" $fresh_install $path_to_git_repo $path_to_config
-	
+
 	copy_system_file "ssh" "ssh_ports.nix" "no_edit_ssh_ports.nix" $fresh_install $path_to_git_repo $path_to_config
 	
 	replace_system_string "ssh" "no_edit_ssh_ports.nix" "SSHPORTS_REPLACE" $ssh_ports $fresh_install $path_to_config
-	
+
 	#######################################
-	
-	create_basic_system_link "systemd-boot" $fresh_install $path_to_git_repo $path_to_config
-	create_basic_system_link "trackpad" $fresh_install $path_to_git_repo $path_to_config
-	
-	#######################################
-	
-	create_basic_system_link "users" $fresh_install $path_to_git_repo $path_to_config
-	
+
 	copy_system_file "users" "users_config.nix" "no_edit_users_config.nix" $fresh_install $path_to_git_repo $path_to_config
 	
 	replace_system_string "users" "no_edit_users_config.nix" "USERNAME_REPLACE" $username $fresh_install $path_to_config
-	
+
 	#######################################
-	
-	creare_any_link ( [ $path_to_git_repo, "system/configuration.nix" ] | path join ) ( [ $path_to_config, "system/configuration.nix" ] | path join ) $fresh_install
-	
-	#######################################
-	
-	copy_any_file /tmp/hardware-configuration.nix ( [ $path_to_config, "system/hardware-configuration.nix" ] | path join ) $fresh_install
-	
-	#######################################
-	
+
 	creare_any_link ( [ $path_to_git_repo, "flake.nix" ] | path join ) ( [ $path_to_config, "edit_this_flake.nix" ] | path join ) $fresh_install
 	
 	copy_any_file ( [ $path_to_git_repo, "flake.nix" ] | path join ) ( [ $path_to_config, "flake.nix" ] | path join ) $fresh_install
@@ -374,4 +253,3 @@ def main [ fresh_install: int = 0 ] any -> any {
 	read_from ( [ $path_to_config, "flake.nix" ] | path join ) $fresh_install | str replace "USERNAME_REPLACE" $username | save_to_file ( [ $path_to_config, "flake.nix" ] | path join ) $fresh_install
 	read_from ( [ $path_to_config, "flake.nix" ] | path join ) $fresh_install | str replace "HOSTNAME_REPLACE" $hostname | save_to_file ( [ $path_to_config, "flake.nix" ] | path join ) $fresh_install
 }
-

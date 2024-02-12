@@ -1,7 +1,5 @@
 #! /usr/bin/env nu
 
-let path_to_config = "/mnt/etc/nixos/config_dir"
-
 let git_repo_name = "testing_linux"
 
 let path_to_git_repo = ( [ "/mnt/etc/nixos", $git_repo_name ] | path join )
@@ -128,49 +126,49 @@ def main []: any -> any {
 	
 	#######################################
 	
-	git clone ( [ "https://github.com/InfinityMachine0/", $git_repo_name ] | str join ) ( [ "/mnt/etc/nixos", $git_repo_name ] | path join )
+	git clone ( [ "https://github.com/InfinityMachine0/", $git_repo_name ] | str join ) $path_to_git_repo
 
 	print " "
 
 	to_continue
 
 	#######################################
-	
-	mkdir $path_to_config
 
-	mkdir ( [ $path_to_config, "values" ] | path join )
+	mkdir ( [ $path_to_git_repo, "values" ] | path join )
 
 	mkdir ( [ "/mnt/home", $username, "personal_scripts" ] | path join )
 
 	#######################################
 
-	$git_repo_name | save ( [ $path_to_config, "values/git_repo_name.conf" ] | path join )
+	$git_repo_name | save ( [ $path_to_git_repo, "values/git_repo_name.conf" ] | path join )
+
+	ln -s ( [ $path_to_git_repo, "values/git_repo_name.conf" ] | path join ) "/mnt/etc/nixos/link_git_repo_name.conf"
 
 	#######################################
 	
-	$platform | save ( [ $path_to_config, "values/platform.conf" ] | path join )
+	$platform | save ( [ $path_to_git_repo, "values/platform.conf" ] | path join )
 
-	$gpu | save ( [ $path_to_config, "values/gpu.conf" ] | path join )
+	$gpu | save ( [ $path_to_git_repo, "values/gpu.conf" ] | path join )
 	
 	#######################################
 	
-	$hostname | save ( [ $path_to_config, "values/hostname.conf" ] | path join )
+	$hostname | save ( [ $path_to_git_repo, "values/hostname.conf" ] | path join )
 	
-	$username | save ( [ $path_to_config, "values/username.conf" ] | path join )
+	$username | save ( [ $path_to_git_repo, "values/username.conf" ] | path join )
 	
 	#######################################
 	
-	$ssh_ports | save ( [ $path_to_config, "values/ssh_ports.conf" ] | path join )
+	$ssh_ports | save ( [ $path_to_git_repo, "values/ssh_ports.conf" ] | path join )
 	
-	$tcp_ports | save ( [ $path_to_config, "values/tcp_ports.conf" ] | path join )
+	$tcp_ports | save ( [ $path_to_git_repo, "values/tcp_ports.conf" ] | path join )
 	
-	$udp_ports | save ( [ $path_to_config, "values/udp_ports.conf" ] | path join )
+	$udp_ports | save ( [ $path_to_git_repo, "values/udp_ports.conf" ] | path join )
 
 	#######################################
 	
-	$git_username | save ( [ $path_to_config, "values/git_username.conf" ] | path join )
+	$git_username | save ( [ $path_to_git_repo, "values/git_username.conf" ] | path join )
 	
-	$git_email | save ( [ $path_to_config, "values/git_email.conf" ] | path join )
+	$git_email | save ( [ $path_to_git_repo, "values/git_email.conf" ] | path join )
 
 	#######################################
 	
@@ -197,7 +195,7 @@ def main []: any -> any {
 	to_continue
 
 	#######################################
-	print ( [ "nixos-install --flake " ,$path_to_config, "#", $hostname ] | str join )
+	print ( [ "nixos-install --flake " ,$path_to_git_repo, "#", $hostname ] | str join )
 	print "             ^"
 	print "execute that | command"
 }

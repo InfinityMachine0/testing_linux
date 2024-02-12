@@ -1,0 +1,13 @@
+values/
+platform_config.nix
+btrfs_config.nix
+hyprland_platform_patch.nix
+gpu_config.nix
+hyprland_gpu_patch.nix
+secret_git_names.nix
+secret_home-path_config.nix
+secret_firewall_config.nix
+secret_hostname.nix
+secret_ssh_ports.nix
+secret_users_config.nix
+flake.nix
